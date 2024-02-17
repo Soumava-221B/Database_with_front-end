@@ -5,7 +5,7 @@ const getAllUsers = (req, res) => {
     // to find records with a specific conditions
     // User.find({lastName: "Sharma", email:"abc@gmail.com"}).then((result) => {
     User.find({}).then((result) => {
-        console.log('records fetched: ', result);
+        // console.log('records fetched: ', result);
         res.json(result)
     }).catch((err) => {
         res.json({"message": "error fetching the records"})
@@ -17,18 +17,21 @@ const creatAUser = (req, res) => {
     // 1. create a object following the schema of user
     // 2. save that object to db using .save() on top of that object
 
-    // TODO: take input from the user insted of hardcoding it ...
-    const newObj = new User({
-        firstName: "xyz",
-        lastName: "Kumar",
-        email: "xyz@gmail.com"
-    });
-    newObj.save().then((res) => {
-        res.json({"message": "document created successfully!"});
+    // const newObj = {
+    //     firstName: req.body.f,
+    //     lastName: req.body.l,
+    //     email: req.body.e
+    // }
+
+    const newObj = new User(req.body);
+
+    console.log(newObj);
+    newObj.save().then((result) => {
+        res.status(201).json({"message": "document created successfully!"});
     }).catch((err) => {
-        res.json({"message": "error creating document"});
+        console.log(err)
+        res.status(500).json({"message": JSON.stringify(err)});
     })
-    // res.send('Welcome to post /user route')
 }
 
 module.exports = {
